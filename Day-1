@@ -1,0 +1,150 @@
+Strangler Fig Pattern
+
+this pattern is a software migration pattern used to gradually replace p or refactor a legacy system with a new system, piece by piece with out disrupting its existing functionality , 
+
+There are 4 different patterns
+Identification :
+Transformation :
+Co- Existence :
+Elimination : 
+
+What are containers, 
+If we use containers then for each microservice Accounts, Loans, Cards. We can have different types of JDK version for loans we can have different Java 8 for cards we can have Java 10 and Spring Boot Libraries. 
+
+Container Engine is Docker. 
+
+A container is a loosely isolated environment that allows us to build and run software packages, These software packages include the code and all the dependencies to run the application quickly and reliably on any computing environment. we call these packages as docker images
+
+A container is a lightweight, isolated runtime environment that packages:
+
+Application code
+
+Runtime (Java, Python, Node, etc.)
+
+Libraries
+
+Dependencies
+
+System tools
+
+Everything needed to run the application consistently anywhere.
+
+Containerization:
+Containerization is the process/technology of packaging applications into containers.
+So containerization = method of creating and running containers.
+Spring Boot App
+      ↓
+Docker Image
+      ↓
+Run Container
+      ↓
+Application Running
+
+Docker is the most popular platform/tool used to implement containerization.
+
+It provides everything needed to:
+
+Build container images
+
+Run containers
+
+Manage containers
+
+Distribute containers
+
+FLOW
+Containerization (Concept / Technology)
+            ↓
+Containers (Result of containerization)
+            ↓
+Docker (Tool used to create & run containers)
+
+WITHOUT DOCKER:
+
+Install Java
+Install Maven
+Clone repo
+Build project
+Run JAR
+
+WITH DOCKER:
+docker build -t project-api .
+docker run -p 8080:8080 project-api
+
+with my machine I can run the Java in container 1 and python file in container 2 and they share the same OS Kernel
+Kernel is the heart of Operating System and it is middle man so that my Applications talk to the Hardware componenets like CPU, RAM.	 
+
+To understand Docker containers, two Linux kernel features are very important:
+
+Namespaces and Control Groups (cgroups).
+
+They are the core technologies behind containers.
+
+Namespaces → Isolation
+
+PID Namespace (Process Isolation)
+Each container has its own process list.
+
+Example:
+
+Container 1:
+
+PID 1 → Spring Boot
+PID 2 → JVM thread
+
+Container 2:
+
+PID 1 → MySQL
+PID 2 → MySQL worker
+
+Both containers have PID 1, but they are isolated.
+
+Network Namespace
+
+Each container has its own network stack.
+
+Example:
+
+Container 1 → IP 172.17.0.2
+Container 2 → IP 172.17.0.3
+
+Each container has:
+
+its own IP
+
+its own ports
+
+its own network interfaces
+
+Control groups (cgroups) control how much system resources a container can use.
+
+They manage:
+
+CPU
+
+Memory
+
+Disk I/O
+
+Network
+
+Without cgroups, one container could consume all resources and crash the system.
+
+Example
+
+Suppose your server has:
+
+8 GB RAM
+4 CPU cores
+
+You run two containers:
+
+Container 1 → Spring Boot
+Container 2 → MySQL
+
+Using cgroups you can set limits:
+
+Spring Boot → 2GB RAM
+MySQL → 3GB RAM
+
+So Spring Boot cannot use more than 2GB RAM.

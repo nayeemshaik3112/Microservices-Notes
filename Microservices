@@ -1,0 +1,35 @@
+What are Microservices
+
+Monolithic : Back a decade , all the applications used to deploy as a single unit where all the funtionality deployed together inside a single server
+we call this architecture as monolithic
+
+A single server has 
+Presentation layer , Bussiness logic layer, Data Access layer
+
+Then moved to SOA
+Service oriented architecture , it some what loose coupled into smaller, modular service that can be independently devloped, deployed and managed
+
+Server 1
+
+Presentation layer(UI)
+||
+
+goes from middle ware
+
+||
+to Enterprise Service Bus (ESB)
+
+to 
+
+Server 2
+
+server2 has Accounts service, loan service, card service.
+
+Best architecture - MICROSERVICES
+Microservices are independently releasable services that are modeled around a business domain. A service encapsulates functionality and makes it accessible to other services via networks. You construct a more complex system from these building blocks. One microservice might represent accounts, another cards, and yet another loans, but together they might constitute an entire banking system. we can have different DAta bases in MS, RDBMS. Mysql....
+
+Monolithic - Single Unit
+SOA- Coarse- Grained
+MS - Fine Grained
+
+Features - Parallel development, Agility, Scalability, Usability, Complex and Operation Overhead and Secuirty Concerns and performance(Here MS cannot win).
