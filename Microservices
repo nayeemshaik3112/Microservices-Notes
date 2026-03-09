@@ -7,7 +7,7 @@ A single server has
 Presentation layer , Bussiness logic layer, Data Access layer
 
 Then moved to SOA
-Service oriented architecture , it some what loose coupled into smaller, modular service that can be independently devloped, deployed and managed
+Service oriented architecture , it some what loose coupled into smaller, modular service that can be independently developed, deployed and managed
 
 Server 1
 
@@ -32,4 +32,8 @@ Monolithic - Single Unit
 SOA- Coarse- Grained
 MS - Fine Grained
 
-Features - Parallel development, Agility, Scalability, Usability, Complex and Operation Overhead and Secuirty Concerns and performance(Here MS cannot win).
+Features - Parallel development, 
+Agility,
+Scalability,
+Usability,
+Complex and Operation Overhead and Secuirty Concerns and performance(Here MS cannot win).
