@@ -1,3 +1,13 @@
+None selected 
+
+Skip to content
+Using Gmail with screen readers
+in:draft 
+Conversations
+0% of 15 GB used
+Terms · Privacy · Program Policies
+Last account activity: 0 minutes ago
+Open in 1 other location · Details
 JAR and WAR
 JAR - A JAR file is a package that contains compiled Java classes and resources bundled into one file.
 myapp.jar
@@ -19,8 +29,8 @@ myapp.war
 ├── js
 │
 └── WEB-INF
-     ├── classes
-     └── lib
+     ├── classes
+     └── lib
 
 Maven and few Java Commands
 Maven
@@ -80,4 +90,120 @@ Only 4 commands to convert any service into spring boot application using docker
 
 These Commands are very huge to generate a docker image and to build a container from it, So going forware we will use BuildPacks or Google Jibs to generate Images and generate Containers
 
-  
+How to Generate Docker Images using BuildPacks:
+
+First add the 
+<image>
+	<name>somename/${project.artifactid}:s4</name>
+</image>
+
+mvn spring-boot:build-image - from the location where the pom.xml no need of docker file here , it will directly create the docker image.
+
+docker run -p 8090:8090 somename/ourservicename:s4 , Starts the docker container based on the docker image details
+
+How to Generate Docker Images using Google jibs: This is only used for Java Applications , but BuildPacks used for python, ruby, node.js
+
+First add necessary tags
+
+2.mvn complie jib:dockerBuild -> To generate a docker image 
+3.docker run -p 9000:9000 somename/cards:s4 -> This will start the docker container on docker image and port mapping is provided
+
+Even without docker app installed we can generate images with the help of google jibs with some amazon credentials etc which is now not needed to know.
+This approach used in CI/CD Pipeline.
+
+Google libs are used widely and BuildPacks have some issues to use.
+
+How to pull and push 
+
+To push into remote repository:
+docker image push docker.io/name/servicename:s4
+
+under hubs we can see our services and we can do the vice versa also 
+
+we can pull the services from remote to the docker. before that delete the containers and images
+Now our docker donot have images and containers 
+
+docker pull name/servicename:verison then it will pull from remote to local system.
+
+DOCKER Compose:
+
+Docker Compose is a tool used to define and run multiple Docker containers (services) using a single YAML configuration file.
+
+version: "3.8"
+
+services:
+
+  accounts:
+    image: accounts-service
+    ports:
+      - "8081:8080"
+
+  loans:
+    image: loans-service
+    ports:
+      - "8082:8080"
+
+  cards:
+    image: cards-service
+    ports:
+      - "8083:8080"
+
+
+version: "3.8"
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bankdb
+    ports:
+      - "3306:3306"
+
+  accounts:
+    image: accounts-service
+    build: ./accounts
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+
+  loans:
+    image: loans-service
+    build: ./loans
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mysql
+
+  cards:
+    image: cards-service
+    build: ./cards
+    ports:
+      - "8083:8080"
+    depends_on:
+      - MySQL
+
+With docker compose up and docker compose down to create and delete the containers
+
+All docker commands 
+docker images
+docker image inspect [id]
+docker image rm [id] - remove
+docker build - generate docker image from docker file
+docker run -p [hostport]:[containerport] [image_name]
+docker ps - To show docker containers
+docker ps -a - TO show docker containers running and stopped
+docker container start [container-id] - To Start one or more stopped container
+docker container pause [container-id] - To pause one or more container
+docker container unpause [container-id] - To unpause 
+docker container stop [id]
+docker container kill [id]
+docker container restart [id]
+docker container inspect[id]
+docker container logs[id]
+
+JAR and WAR.txt
+Displaying JAR and WAR.txt.
