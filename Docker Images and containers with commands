@@ -1,0 +1,83 @@
+JAR and WAR
+JAR - A JAR file is a package that contains compiled Java classes and resources bundled into one file.
+myapp.jar
+│
+├── META-INF
+│   └── MANIFEST.MF
+│
+├── com
+│   └── example
+│       └── MyClass.class
+│
+├── application.properties
+
+WAR - A WAR file is a package specifically for web applications that runs inside a web server / application server.
+myapp.war
+│
+├── index.jsp
+├── css
+├── js
+│
+└── WEB-INF
+     ├── classes
+     └── lib
+
+Maven and few Java Commands
+Maven
+mvn -version -> To get the version of Maven we have in our system
+mvn clean install -> To compile my desired accounts or loans any folder , Once it is done then it will create a JAR file
+
+mvn clean install
+→ Compiles the project
+→ Runs tests
+→ Packages the application
+
+→ Generates JAR/WAR inside target folder That will create a JAR file
+Then with the JAR file I will run
+mvn spring-boot:run -> This will run accounts or selected folder as my spring boot application
+
+Java Command
+java -jar target/accounts-0.0.1-SNAPSHOT.jar
+This also same it will start the accounts service or selected service as a spring boot application
+
+
+There are 3 ways to generate a Docker Image
+01- Dockerfile -> accounts
+02- Buildpacks -> loans
+03- Google jib -> cards
+
+01- Dockerfile -> accounts:
+
+FROM openjdk:17 -> Starts a base image containing the Java runtime
+COPY target/accounts.jar accounts.jar -> Add's the application jar's to the image
+ENTRYPOINT ["java","-jar","accounts.jar"] -> To execute the application or the one who tries to create a docker container with our docker image , they should follows these entrypoints
+
+These commands helps to and convert a docker file into docker image
+
+How to create a docker image with those :
+docker build . -t dockerhubname/servicename:docker version
+
+dockerhubname -> this is the hub where all the docker images are stored
+servicename -> which service we are creating by
+dockerversion -> any version
+
+docker images - TO get list of images
+docker inspect image imageid
+
+docker run -p 8080:8080 name/servicename:version -> we can create docker container with image
+
+docker run -d -p 8080:8080 name/servicename:version , it is to run the docker image in a detached mode, we cannot see any logs there
+
+docker ps -> it is used to see the containers currently running
+
+docker ps -a -> get all the containers which are stopped
+
+Only 4 commands to convert any service into spring boot application using docker container
+1.mvn clean install - 							we should run from the location where pom.xml is present to generate a JAR file inside Target folder
+2.FROM, COPY, ENTRYPOINT  - 						These commands helps to and convert a docker file into docker image
+3.docker build . -t dockerhubname/servicename:docker version - 		Will generate a docker image
+4. docker run -p 8080:8080 name/servicename:version - 			We can create docker container with image
+
+These Commands are very huge to generate a docker image and to build a container from it, So going forware we will use BuildPacks or Google Jibs to generate Images and generate Containers
+
+  
