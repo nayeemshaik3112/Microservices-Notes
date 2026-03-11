@@ -1,0 +1,37 @@
+We learnt the
+-> Spring Configuration
+-> Spring Profiles
+-> To Over come the limitations under Spring Profiles, we will use Spring Cloud Config
+
+Spring Cloud Config
+A centralized Configuration Server with spring cloud config can overcome all the drawbacks that we discussed in the previous slide.
+Spring Cloud config provides server and client side support for externalized configuration in a system. with this we will get config server we can have a central place to manager external properties for applications across all the environments.
+
+
+To store all the configurations in a centralized manner
+we can have 3 different types
+At first we have 3 services, loans, accounts, cards and also we will add spring cloud config (Config Client and Config Server)
+1.we can configure inside a class path 
+2.we can store inside our system , any file we can create and we can access it 
+3.with GitHub we can store and we can access it from there 
+
+By any one of the method we can put all our configuration and made it as centralized and can be used inside config server and this server will be used by our cards, accounts, loans services
+
+1.Read the configuration from a class path location of config server
+
+Create all the yml files
+Example : accounts, account_prod, accounts_QA.... same for loans, cards all were 9 config's all are yml files and the data is should be inside which is only required to that specific config
+Then in original application.yml 
+spring:
+ application:
+  name:"configserver"
+profiles:
+ active:native
+cloud:
+ config:
+  server:
+   native:
+    search-locations:"/classpath:/config"
+
+server:
+ port:8071

@@ -1,0 +1,65 @@
+What if we have different values at different platforms to configure
+
+Then only we will use the Spring Boot Profiles
+
+we will have different profiles for different environments, 
+
+for prod we can have application_prod.properties
+for QA we can have application_qa.properties
+
+we can activate it like 
+spring.profiles.active=prod
+spring.profiles.active=QA
+
+We will create different application.yml , application_qa.yml, application_prod.yml. 
+and we will set the values accordingly
+
+spring:
+ config:
+  activate:
+   on-profile:"qa"
+
+spring:
+ config:
+  activate:
+   on-profile:"prod"
+
+and under main application.yml file
+just import our new qa and prod application.yml files
+import:
+ -"application_qa.yml"
+ -"application_prod.yml"
+profiles:
+active:
+  -"qa" 
+
+When we select a particular profile then the values will be overridden the default values and qa or prod values will be displayed
+if we want we can delete the image and generate another image for prod but this is not correct behaviour, 
+To overcome we can use external parameters
+
+There are 3 ways we can do that
+1. Select our main class and there is option Modify Run Configuration, Select by clicking on right click then under program arguments we can pass
+--spring.profiles.active=prod --build.version=1.1
+
+2.With JVM System Variables
+Same right click, but this time we have modify options inside that select Add vm option nd then add VM
+-Dspring.profiles.active=prod -Dbuild.version=1.3
+
+3.Environment Variables
+
+Same right click , under environment variables text field
+PUT ALL THE THINGS IN UPPER_CASE
+
+SPRING_PROFILES_ACTIVE=prod;BUILD_VERSION=1.3;
+
+if we set all the values then the highest priority goes for CLI aruguments values will display
+
+JVM vs Environment variables - JVM will WIN
+
+if nothing is set then it will goes back to application properties.
+
+
+What are the limitations if we use these profiles and also setting up the values from above 3 approaches.
+So if we put the environment variables inside the JVM text field, are the first approach, so which is this? Modify run configuration under modify run configuration. 
+Everything exposes the data, which is not a good practice. And this is only for three instances, loans, accounts, and cards. What if there are hundreds of instances or 50s of instances? We cannot set up all those things under this CI/CD pipeline also.
+So if we are running our test cases under CI/CD pipeline, then API service has its own application.properties. But to overcome this problem, we are having Spring Cloud Config.

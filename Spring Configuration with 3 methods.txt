@@ -1,0 +1,198 @@
+Microservices – Configuration Management Notes
+1. Configuration Management Challenge in Microservices
+
+In a monolithic application, configuration is simple because the entire application runs as a single service with a single configuration file.
+
+Example:
+
+application.properties
+
+However, in a microservices architecture, an application is split into multiple independent services.
+
+Example services:
+
+accounts-service
+loans-service
+cards-service
+gateway-service
+
+Each service has its own configuration.
+
+Example:
+
+accounts-service → application.yml
+loans-service → application.yml
+cards-service → application.yml
+Problems
+
+Too many configuration files
+
+Every microservice maintains its own configuration.
+
+Multiple environments
+
+DEV
+
+QA
+
+UAT
+
+PROD
+
+Each environment has different configuration values.
+
+Configuration updates are difficult
+
+If a property changes, it must be updated in many services.
+
+Security concerns
+
+Sensitive data like passwords and API keys should not be duplicated across services.
+
+Because of these issues, configuration management becomes complex in microservices.
+
+2. Spring Boot Configuration Sources
+
+Spring Boot can read configuration from multiple sources:
+
+application.properties
+
+application.yml
+
+Environment variables
+
+Command line arguments
+
+Spring Cloud Config Server
+
+Spring Boot automatically loads configuration during application startup.
+
+3. Ways to Access Configuration in Spring Boot
+
+Spring Boot provides three main approaches to access configuration values.
+
+1. Using @Value
+
+@Value is used to inject a single property value from configuration.
+
+Example:
+
+application.properties
+
+accounts.message=Welcome to Accounts Service
+
+Java code:
+
+@Value("${accounts.message}")
+private String message;
+
+Spring injects the property value into the variable.
+
+Limitations of @Value
+
+Not suitable for many properties
+
+Hard to maintain
+
+No grouping support
+
+2. Using Environment Interface
+
+Spring provides the Environment interface to fetch properties programmatically.
+
+Example:
+
+@Autowired
+private Environment environment;
+
+String message = environment.getProperty("accounts.message");
+Limitations
+
+Manual property retrieval
+
+Not structured
+
+Less commonly used in business services
+
+4. Using @ConfigurationProperties (Recommended)
+
+@ConfigurationProperties is the recommended approach in Spring Boot.
+
+It allows binding a group of related configuration properties into a single Java object.
+
+This makes configuration:
+
+structured
+
+type-safe
+
+easier to maintain
+
+Example Configuration
+
+application.yml
+
+accounts:
+  message: Welcome to Accounts Service
+  build-version: 1.0
+  contact-details:
+    name: John
+    email: john@bank.com
+
+Binding Properties to a Class
+@Configuration
+@ConfigurationProperties(prefix = "accounts")
+public class AccountsConfig {
+
+    private String message;
+    private String buildVersion;
+
+    // getters and setters
+}
+
+Spring Boot automatically maps:
+
+accounts.message → message
+accounts.build-version → buildVersion
+
+This automatic mapping is called Property Binding.
+
+Using Configuration Properties in Controller
+@RestController
+public class AccountsController {
+
+    private final AccountsConfig accountsConfig;
+
+    public AccountsController(AccountsConfig accountsConfig) {
+        this.accountsConfig = accountsConfig;
+    }
+
+    @GetMapping("/config")
+    public AccountsConfig getConfig() {
+        return accountsConfig;
+    }
+}
+
+Spring injects the configuration bean into the controller.
+
+5. Using Records with Configuration Properties
+
+In modern Java, we can also use records instead of classes.
+
+Records are immutable data carriers that automatically generate constructors and getters.
+
+Example:
+
+@ConfigurationProperties(prefix = "accounts")
+public record AccountsConfig(
+        String message,
+        String buildVersion
+) {}
+
+Advantages:
+
+less boilerplate code
+
+immutable objects
+
+cleaner design
