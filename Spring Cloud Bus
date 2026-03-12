@@ -1,0 +1,123 @@
+Spring Cloud Bus and Rabbit MQ
+
+Why Spring Cloud Bus:
+If we have 500 instances we can make changes in git hub for the files needed but we cannot refresh 500 instance at once time
+That's why we will use Spring Cloud Bus and RabbitMQ	
+
+Spring Cloud Bus: Links nodes of distributed systems with a lightweight message broker. This can be used to broadcast state changes .
+
+we can install the Rabbit MQ inside docker with command
+
+docker run -it --rm --name rabbitmq -p ......................
+
+Inside pom of all the services incl configure service
+
+we need to add spring-cloud-starter-bus-amqp
+
+rabbitmq
+ host:"localhost"
+  port:5672
+   username:""
+    password:""
+
+This links the spring cloud bus and rabbit mq
+
+when we busrefresh right we are communicated with the rabbit mq , this rabbitmq, host, username and password we put under all the yml files loans and accounts , cards
+since one is refreshed and rabbit mq will is been communicated that some files has been changed and it will communicate to other services also and they will also update the same
+
+To summarise
+1. Add actuator dependency
+2. enable/busrefresh API
+Management:
+ endpoints:
+  web:
+   exposure:
+    include:busrefresh
+3. Add spring cloud bus dependency in the config and as well as services 
+4. setup rabbit mq
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Spring Cloud Bus and Spring cloud config monitor:
+
+We should add dependency of spring-cloud-config-monitor and 
+inside the git hub if any files are changed then we can create a webhook inside git saying when ever change is happened let know the monitor API then it will invoke refresh event with spring cloud bus and RabbitMQ
+
+How to enable webhook and use
+refer this video :
+89. Refresh config at runtime using Spring Cloud Bus & Spring Cloud Config monitor
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LIVENESS AND READINESS
+
+1. Liveness Probe
+Definition
+A Liveness Probe checks whether the application inside the container is still alive or stuck. If the probe fails repeatedly, Kubernetes restarts the container automatically.
+
+Why it is needed
+
+Sometimes an application may enter a deadlock or infinite loop but the container itself is still running.
+
+Example situations:
+
+Thread deadlock
+
+Application freeze
+
+Memory leak causing unresponsiveness
+
+Infinite loop
+What Kubernetes does
+
+If the Liveness Probe fails:
+
+Kubernetes marks container as unhealthy
+
+Container is killed
+
+Container is restarted automatically
+---------------------------------------------------
+2. Readiness Probe
+Definition
+
+A Readiness Probe checks whether the application is ready to receive traffic. If it fails, Kubernetes stops sending requests to that pod but does NOT restart it. Why it is needed Sometimes the application is running but not ready.
+Example situations:
+
+Application still starting
+
+Database connection not established
+
+Cache loading
+
+External service dependency not ready
+
+During this time, traffic should not be routed to the pod.
+
+What Kubernetes does
+
+If the Readiness Probe fails:
+
+Pod is removed from Service endpoints
+
+Pod stops receiving traffic
+
+Container continues running
+
+Once probe succeeds → traffic resumes
+
+under configserver
+under management
+management:
+ health:
+  readiness-state:
+   enabled:true
+  liveness-state:
+   enabled:true
+ endpoint:
+  health:
+   probes:
+    enabled:true
+
+
+after we set the values , make a commin config file. where all the common things will be stored and we donot repeat the things

@@ -1,0 +1,81 @@
+We learnt the
+-> Spring Configuration
+-> Spring Profiles
+-> To Over come the limitations under Spring Profiles, we will use Spring Cloud Config
+
+Spring Cloud Config
+A centralized Configuration Server with spring cloud config can overcome all the drawbacks that we discussed in the previous slide.
+Spring Cloud config provides server and client side support for externalized configuration in a system. with this we will get config server we can have a central place to manager external properties for applications across all the environments.
+
+
+To store all the configurations in a centralized manner
+we can have 3 different types
+At first we have 3 services, loans, accounts, cards and also we will add spring cloud config (Config Client and Config Server)
+1.we can configure inside a class path 
+2.we can store inside our system , any file we can create and we can access it 
+3.with GitHub we can store and we can access it from there 
+
+By any one of the method we can put all our configuration and made it as centralized and can be used inside config server and this server will be used by our cards, accounts, loans services
+
+1.Read the configuration from a class path location of config server
+
+Create all the yml files
+Example : accounts, account_prod, accounts_QA.... same for loans, cards all were 9 config's all are yml files and the data is should be inside which is only required to that specific config
+Then in original application.yml 
+spring:
+ application:
+  name:"configserver"
+profiles:
+ active:native
+cloud:
+ config:
+  server:
+   native:
+    search-locations:"/classpath:/config"  we said that all the yml's are present under this path 
+
+server:
+ port:8071
+
+We can check via end points in chrome or edge , if we give endpoint as accounts-prod, then the yml of that will get execute
+ 
+How to connect our accounts microservice with the configserver and at last config : import: "optional:configserver:http-8081", optional -> even if we made any mistake while setting up the things if we mention optional then still the spring boot applications will start
+
+we can also use that right click option and set the spring.active.profile=qa or prod , still it will consider and give the result 
+
+in yml file, provide the name : "accounts" if we want we can also give profile as prod it means run accounts with prod file or prod data
+
+2. Achieve the same thing with a file system location.
+
+Just update and write searchlocations:"path where the files put in the system" and run. not that much important
+
+3. Achieve this with Git Hub Repo
+this is the most important and efficient way to achieve config server
+
+git:
+ uri:"url"
+ default-label:main
+ timeout:5
+ clone-on-start:true
+ force-pull:true
+
+easiest and more efficient way is GITTT
+
+In Git if we put our mail and name , mainly name then we that data will leak since our original mail is being used
+so that's why we need to encrypt and decrypt the mail ID
+
+So , if we want to change the values that we put under GitHub then we cannot stop 100's of microservices then work on files and then restart
+instead we can , we can rename or change the cards, loans, accounts, records as class
+Then with the class we can get and set the values , since we can set the value we can fetch the values from the git.
+
+and under every application.yml file
+
+we can write
+management:
+ endpoints:
+  web:
+   exposure:
+   include:"*"
+
+Then after we set this we can use actuator/refresh to refresh the updates then we can see the updated values in the GIT reflects in the postman
+
+if we run this 8080/actuators/refresh, then we can see the what are the files we changed under response
